@@ -1,0 +1,144 @@
+create database dress_data;
+use dress_data;
+create table if not exists dress (
+`Dress_ID` varchar(30),	
+`Style` varchar(30),
+`Price` varchar(30),	
+`Rating` varchar(30),	
+`Size` varchar(30),	
+`Season` varchar(30),	
+`NeckLine` varchar(30),	
+`SleeveLength` varchar(30),	
+`waiseline` varchar(30),	
+`Material` varchar(30),	
+`FabricType` varchar(30),	
+`Decoration` varchar(30),	
+`Pattern Type` varchar(30),	
+`Recommendation` varchar(30)) 
+
+show global variables like 'secure_file_priv'
+
+set global local_infile=1
+select * from dress;
+LOAD DATA local INFILE  
+'D:/AttributeDataSet.csv'
+into table dress
+FIELDS TERMINATED by ','
+ENCLOSED by '"'
+lines terminated by '\n'
+IGNORE 1 ROWS;
+
+create table if not exists test (
+test_id int auto_increment,
+test_name varchar (30),
+test_mailid varchar (30),
+test_address varchar (30),
+primary key (test_id))
+
+Select * from test;
+insert into test values (1,'nisha', 'nisha231@gmail.com', 'bangalore'),
+(2,'putul', 'putul@gmail.com', 'bangalore'),
+(3,'santosh', 'santosh@gmail.com', 'hyderabad'),
+(4,'varun', 'varun@gmail.com', 'hyderabad')
+select * from test;
+
+create table if not exists test2 (
+test_id int not null auto_increment,
+test_name varchar (30),
+test_mailid varchar (30),
+test_address varchar (30),
+primary key (test_id))
+
+insert into test2 (test_name, test_mailid, test_address) values ('nisha', 'nisha231@gmail.com', 'bangalore'),
+('putul', 'putul@gmail.com', 'bangalore'),
+('santosh', 'santosh@gmail.com', 'hyderabad'),
+('varun', 'varun@gmail.com', 'hyderabad')
+Select * from test2
+
+create table if not exists test3 (
+test_id int ,
+test_name varchar (30),
+test_mailid varchar (30),
+test_address varchar (30),
+test_salary int check (test_salary > 10000))
+
+alter table test3 add check (test_id > 0)
+insert into test3  values (-1,'nisha', 'nisha231@gmail.com', 'bangalore', 12000)
+insert into test3  values (81,'nisha', 'nisha231@gmail.com', 'bangalore', 12000)
+
+insert into test3  values (1,'nisha', 'nisha231@gmail.com', 'bangalore', 12000),
+(2, 'putul', 'putul@gmail.com', 'bangalore', 15000),
+(3, 'santosh', 'santosh@gmail.com', 'hyderabad', 100000),
+(4,'varun', 'varun@gmail.com', 'hyderabad', 150000)
+
+create table if not exists test4 (
+test_id int ,
+test_name varchar (30),
+test_mailid varchar (30),
+test_address varchar (30), check (test_address = 'bangalore'),
+test_salary int check (test_salary > 10000))
+
+insert into test4  values (1,'nisha', 'nisha231@gmail.com', 'bangalore', 12000),
+(2, 'putul', 'putul@gmail.com', 'bangalore', 15000),
+(3, 'santosh', 'santosh@gmail.com', 'bangalore', 100000),
+(4,'varun', 'varun@gmail.com', 'bangalore', 150000)
+
+create table if not exists test5 (
+test_id int not null 
+test_name varchar (30),
+test_mailid varchar (30),
+test_address varchar (30), check (test_address = 'bangalore'),
+test_salary int check (test_salary > 10000))
+
+select * from test5
+
+insert into test5 (test_name, test_mailid, test_address, test_salary) values ('nisha', 'nisha231@gmail.com', 'bangalore', 12000)
+
+create table if not exists test6 (
+test_id int not null auto_increment , 
+test_name varchar (30),
+test_mailid varchar (30),
+test_address varchar (30), check (test_address = 'bangalore'),
+test_salary int check (test_salary > 10000),
+primary key (test_id))
+
+insert into test6 (test_name, test_mailid, test_address, test_salary) values ('nisha', 'nisha231@gmail.com', 'bangalore', 12000)
+select * from test6;
+
+create table if not exists test7 (
+test_id int not null default 0,
+test_name varchar (30),
+test_mailid varchar (30),
+test_address varchar (30), check (test_address = 'bangalore'),
+test_salary int check (test_salary > 10000))
+
+insert into test7 (test_name, test_mailid, test_address, test_salary) values ('nisha', 'nisha231@gmail.com', 'bangalore', 12000)
+select * from test7;
+
+insert into test7 (test_id, test_name, test_mailid, test_address, test_salary) values (123, 'nishat', 'nisha231@gmail.com', 'bangalore', 12000)
+
+create table if not exists test8 (
+test_id int not null default 0,
+test_name varchar (30),
+test_mailid varchar (30) unique ,
+test_address varchar (30), check (test_address = 'bangalore'),
+test_salary int check (test_salary > 10000))
+
+insert into test8 (test_name, test_mailid, test_address, test_salary) values ('nisha', 'nisha231@gmail.com', 'bangalore', 12000)
+select * from test8;
+
+create table if not exists test9 (
+test_id int not null  auto_increment,
+test_name varchar (30)  not null default 'unknown',
+test_mailid varchar (30) unique not null ,
+test_address varchar (30) check (test_address = 'bangalore') not null, 
+test_salary int check (test_salary > 10000) not null,
+primary key (test_id))
+
+select * from test9
+insert into test9 (test_id, test_name, test_mailid, test_address, test_salary) values (100, 'nisha', 'nisha231@gmail.com', 'bangalore', 12000)
+
+insert into test9 (test_name, test_mailid, test_address, test_salary) values ('nisha', 'nisha1231@gmail.com', 'bangalore', 12000)
+insert into test9 (test_name, test_mailid, test_address, test_salary) values ('nisha', 'nisha11231@gmail.com', 'bangalore', 12000)
+insert into test9 (test_id, test_name, test_mailid, test_address, test_salary) values (500, 'nisha', 'nishaa231@gmail.com', 'bangalore', 12000)
+insert into test9 (test_name, test_mailid, test_address, test_salary) values ('nisha', 'nishha11231@gmail.com', 'bangalore', 12000)
