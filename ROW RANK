@@ -1,0 +1,93 @@
+create database win_fun
+use win_fun
+
+create table ineuron_students(
+student_id int,
+student_batch varchar (40),
+student_name varchar (40),
+student_stream varchar (40),
+student_marks int,
+student_mail_id varchar (50))
+
+insert into ineuron_students values (101, 'FSDA', 'varun', 'CS', 80, 'varun@gmail.com'),
+insert into ineuron_students values (102, 'FSDA', 'ram', 'CS', 80, 'ram@gmail.com'),
+(103, 'FSDA', 'rohan', 'CS', 70, 'rohan@gmail.com'),
+(104, 'FSDA', 'shyam', 'MS', 70, 'shyam@gmail.com'),
+(105, 'FSDA', 'ritesh', 'MS', 70, 'ritesh@gmail.com'),
+(106, 'FSDA', 'putul', 'MS', 85, 'putul@gmail.com'),
+(107, 'FSDs', 'shwetha', 'EC', 85, 'shwetha@gmail.com'),
+(108, 'FSDe', 'neha', 'EC', 85, 'neha@gmail.com'),
+(109, 'FSDs', 'roopa', 'EC', 80, 'roopa@gmail.com'),
+(110, 'FSDs', 'puja', 'EEE', 80, 'puja@gmail.com'),
+(111, 'FSDs', 'dilip', 'EEE', 80, 'dilip@gmail.com'),
+(112, 'FSDe', 'raj', 'EEE', 60, 'raj@gmail.com'),
+(113, 'FSDe', 'swati', 'IS', 60, 'swati@gmail.com'),
+(114, 'FSDe', 'rashmi', 'IS', 60, 'rashmi@gmail.com'),
+(115, 'FSDs', 'madhu', 'IS', 80, 'madhu@gmail.com'),
+(116, 'FSDs', 'rani', 'CS', 80, 'rani@gmail.com'),
+(117, 'FSDs', 'raja', 'CS', 80, 'raja@gmail.com')
+insert into ineuron_students values(118 ,'fsbc' , 'sandeep','ECE',65,'sandeep@gmail.com'),
+(119 ,'fsbc' , 'sanjay','ECE',65,'sanjay@gmail.com')
+
+select * from ineuron_students
+select student_batch, sum(student_marks) from ineuron_students group by student_batch
+select student_batch, min(student_marks) from ineuron_students group by student_batch
+select student_batch, max(student_marks) from ineuron_students group by student_batch
+select student_batch, avg(student_marks) from ineuron_students group by student_batch
+select count(student_batch) from ineuron_students
+
+select count(distinct student_batch) from ineuron_students
+select student_batch, count(student_batch) from ineuron_students group by student_batch
+select student_batch, count(*) from ineuron_students group by student_batch
+
+Select student_name from ineuron_students where student_marks in
+(select max(student_marks)from ineuron_students where student_batch = 'FSDA')
+select max(student_marks)from ineuron_students where student_batch = 'FSDA'
+
+select student_name from ineuron_students where student_batch = 'FSDA' order by student_marks desc limit 4,1;
+select * from ineuron_students where student_batch = 'FSDA' order by student_marks
+select student_name from ineuron_students where student_batch = 'FSDA' order by student_marks desc limit 3,3;
+
+select student_id, student_batch,  student_stream, student_marks, 
+row_number() over (order by student_marks) as 'row number' from ineuron_students 
+
+select student_id, student_batch,  student_stream, student_marks, 
+row_number() over (partition by student_batch order by student_marks) as 'row number' from ineuron_students 
+
+select * from (select student_id , student_batch , student_stream,student_marks ,
+row_number() over(partition by student_batch order by student_marks desc) as 'row_num' 
+from ineuron_students ) as test where row_num = 1
+
+
+select student_id , student_batch , student_stream,student_marks ,
+row_number() over(order by student_marks desc) as 'row_num', 
+rank() over(order by student_marks desc) as 'row_rank' 
+from ineuron_students
+
+select student_id , student_batch , student_stream,student_marks ,
+row_number() over(partition by student_batch order by student_marks desc) as 'row_num', 
+rank() over(partition by student_batch order by student_marks desc) as 'row_rank' 
+from ineuron_students
+
+select * from (select student_id , student_batch , student_stream,student_marks ,
+row_number() over(partition by student_batch order by student_marks desc) as 'row_num', 
+rank() over(partition by student_batch order by student_marks desc) as 'row_rank' 
+from ineuron_students) as test where row_rank = 1
+
+select student_id , student_batch , student_stream,student_marks ,
+row_number() over(order by student_marks desc) as 'row_num', 
+rank() over(order by student_marks desc) as 'row_rank',
+dense_rank() over(order by student_marks desc) as 'dense_rank'
+from ineuron_students
+
+select * from (select student_id , student_batch , student_stream,student_marks ,
+row_number() over(partition by student_batch order by student_marks desc) as 'row_num', 
+rank() over(partition by student_batch order by student_marks desc) as 'row_rank',
+dense_rank() over(partition by student_batch order by student_marks desc) as 'dense_rank'
+from ineuron_students) as test where `dense_rank` = 2
+
+select * from (select student_id , student_batch , student_stream, student_marks ,
+row_number() over(partition by student_batch order by student_marks desc) as 'row_number',
+rank() over(partition by student_batch order by student_marks desc ) as 'row_rank',
+dense_rank() over( partition by student_batch order by student_marks desc) as 'dense_rank'
+from ineuron_students ) as test where `dense_rank` = 3
