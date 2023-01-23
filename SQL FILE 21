@@ -1,0 +1,209 @@
+create database ineuron_trigger
+Use ineuron_trigger
+
+create table course(
+course_id int , 
+course_desc varchar(50),
+course_mentor varchar(60),
+course_price int ,
+course_discount int)
+create_date date,
+user_info varchar(50)  )
+
+create table course2(
+course_id int , 
+course_desc varchar(50),
+course_mentor varchar(60),
+course_price int ,
+course_discount int,
+user_info varchar(50),
+create_date date)
+
+create table course3(
+course_id int , 
+course_desc varchar(50),
+course_mentor varchar(60),
+course_price int ,
+course_discount int,
+user_info varchar(50),
+create_date date)
+
+create table course_update (
+course_mentor_update Varchar (50),
+course_price_update varchar (60),
+course_discount_Update int)
+
+create table course_update2 (
+course_mentor_update Varchar (50),
+course_price_update varchar (60),
+course_discount_Update int,
+create_date date)
+
+drop table course_update1
+
+delimiter $$
+create trigger course_before_insert 
+before insert
+on course2 for each row
+begin
+set new.create_date = sysdate();
+end$$
+
+select * from course2
+
+insert into course2 (course_id, course_desc, course_mentor, course_price, course_discount) value(101, 'FSDA', 'varun', 4000, 10)
+ 
+ delimiter $$
+create trigger course_before_insert1 
+before insert
+on course3 for each row
+begin
+declare user_value varchar (50);
+set new.create_date = sysdate();
+select user () into user_value;
+set new.user_info = user_value;
+end$$
+
+insert into course3 (course_id, course_desc, course_mentor, course_price, course_discount) value(101, 'FSDA', 'varun', 4000, 10)
+select * from course3
+
+create table ref_course (
+record_insert_date date,
+record_insert_user varchar (50))
+
+ delimiter $$
+create trigger course_before_insert3
+before insert
+on course3 for each row
+begin
+declare user_value varchar (50);
+set new.create_date = sysdate();
+select user () into user_value;
+set new.user_info = user_value;
+insert into ref_course values(sysdate(), user_value);
+end$$
+
+select * from ref_course
+
+create table test1(
+c1 varchar (50),
+c2 date,
+c3 int)
+
+create table test2 (
+c1 varchar (50),
+c2 date,
+c3 int)
+
+create table test3(
+c1 varchar (50),
+c2 date,
+c3 int)
+
+ delimiter $$
+create trigger to_update_others
+before insert
+on test1 for each row
+begin
+insert into  test2 values('xyz', sysdate(),1234);
+insert into  test3 values ('xyz', sysdate(),1234);
+end $$
+
+insert into test1 values("varun", sysdate(), 12345)
+select*from test1
+select*from test2
+select*from test3
+
+
+
+set new.create_date = sysdate();
+select user () into user_value;
+set new.user_info = user_value;
+insert into ref_course values(sysdate(), user_value);
+end$$
+
+
+ delimiter $$
+create trigger to_update_others_table
+after insert
+on test1 for each row
+begin
+update test2 set c1 = 'abc' where c1 = 'xyz';
+delete from test3 where c1 = 'xyz';
+end $$
+
+insert into test1 values("dileep", sysdate(), 12345123)
+insert into test1 values ('krish',sysdate(),90077897)
+SET SQL_SAFE_UPDATES = 0;
+
+delimiter $$
+create trigger to_delete_others_table
+after delete
+on test1 for each row
+begin
+insert into test3 values ('after_delete', sysdate(), 4567);
+end $$
+drop trigger to_delete_others_table
+delete from test1 where c1 = 'dileep'
+
+create trigger to_delete_before_table
+before delete
+on test1 for each row
+begin
+insert into test3 values ("after delete", sysdate(), 4567);
+end $$
+delete from test1 where c1 = 'varun'
+
+insert into test1 values ('abc', sysdate(), 3456);
+select * from test1
+delete from test1 where c1 = 'abc'
+
+create table test11(
+c1 varchar(50),
+c2 date,
+c3 int)
+
+
+create table test12(
+c1 varchar(50),
+c2 date,
+c3 int )
+
+
+create table test13(
+c1 varchar(50),
+c2 date,
+c3 int )
+
+delimiter $$
+create trigger to_update_others1
+after update 
+on test11 for each row
+begin
+insert into test12 (c1,c2,c3) values (old.c1, old.c2, old.c3);
+end $$
+
+select * from test11
+insert into test11 values('nish', sysdate(), 4567)
+insert into test11 values ('after_date', sysdate(),789)
+
+update test11 set c1 = 'after_update' where c1 = 'after_date'
+
+select * from test12
+
+insert into test12 values('sudh', sysdate(), 4567)
+insert into test12 values('sudhanshu', sysdate(), 4567)
+insert into test12 values('sudha', sysdate(), 4567)
+
+delimiter $$
+create trigger to_update_others_before
+before update 
+on test11 for each row
+begin
+insert into test12 (c1,c2,c3) values (new.c1, new.c2, new.c3);
+end $$
+
+update test11 set c1 = 'insert new' where c1 = 'sudh'
+
+1.create a table col = name , mail_id,phone_number , address , users_sys, time_sys,salary,incentive,final_salary
+2.try to check all the time that uses name should start with s for each and every insert op
