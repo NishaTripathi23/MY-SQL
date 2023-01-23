@@ -1,0 +1,252 @@
+create database ineuron_partition
+use ineuron_partition
+
+create table ineuron_course(
+course_name varchar (50),
+course_id int (10),
+course_title varchar (60),
+course_desc varchar (60),
+launch_date date,
+course_fee int,
+course_mentor varchar (60),
+course_launch_year int)
+
+select * from ineuron_course
+insert into ineuron_course values ('machine learning', 101, 'ML', 'this is ML course', 07-07, 3540, 'sudhanshu', 2019),
+('AIops', 101, 'ML', 'this is AIops course', 07-07, 3540, 'sudhanshu', 2019),
+('dlcvnlp', 101, 'ML', 'this is dlcvnlp course', 07-07, 3540, 'sudhanshu', 2020),
+('blockchain', 101, 'ML', 'this is blockchain course', 07-07, 3540, 'sudhanshu', 2020),
+('RL', 101, 'ML', 'this is RL course', 07-07, 3540, 'sudhanshu', 2020),
+('big data', 101, 'ML', 'this is big data course', 07-07, 3540, 'sudhanshu', 2021),
+('FSDA', 101, 'ML', 'this is FSDA course', 07-07, 3540, 'sudhanshu', 2021),
+('java', 101, 'ML', 'this is java course', 07-07, 3540, 'sudhanshu', 2021),
+('fsds', 101, 'ML', 'this is fsds course', 07-07, 3540, 'sudhanshu', 2022),
+('fabe', 101, 'ML', 'this is fabe course', 07-07, 3540, 'sudhanshu', 2022),
+('data analytics', 101, 'ML', 'this is data analytics course', 07-07, 3540, 'sudhanshu', 2022),
+('MERN', 101, 'ML', 'this is MERN course', 07-07, 3540, 'sudhanshu', 2022)
+
+select * from ineuron_course where course_launch_year = 2020
+
+create table ineuron_course1(
+course_name varchar (50),
+course_id int (10),
+course_title varchar (60),
+course_desc varchar (60),
+launch_date date,
+course_fee int,
+course_mentor varchar (60),
+course_launch_year int)
+partition by range (course_launch_year)(
+partition p0 value less than (2019),
+partition p1 value less than (2020),
+partition p2 value less than (2021),
+partition p3 value less than (2022))
+
+create table ineuron_courses1(
+course_name varchar(50),
+course_id int(10),
+course_title varchar(60),
+course_desc varchar(80),
+launch_date date,
+course_fee int,
+course_mentor varchar(60),
+course_launch_year int)
+partition by range(course_launch_year)(
+partition p0 values less than (2019),
+partition p1 values less than (2020),
+partition p2 values less than (2021),
+partition p3 values less than (2022),
+partition p4 values less than (2023));
+
+insert into ineuron_courses1 values ('machine learning', 101, 'ML', 'this is ML course', 07-07, 3540, 'sudhanshu', 2019),
+('AIops', 101, 'ML', 'this is AIops course', 07-07, 3540, 'sudhanshu', 2019),
+('dlcvnlp', 101, 'ML', 'this is dlcvnlp course', 07-07, 3540, 'sudhanshu', 2020),
+('blockchain', 101, 'ML', 'this is blockchain course', 07-07, 3540, 'sudhanshu', 2020),
+('RL', 101, 'ML', 'this is RL course', 07-07, 3540, 'sudhanshu', 2020),
+('big data', 101, 'ML', 'this is big data course', 07-07, 3540, 'sudhanshu', 2021),
+('FSDA', 101, 'ML', 'this is FSDA course', 07-07, 3540, 'sudhanshu', 2021),
+('java', 101, 'ML', 'this is java course', 07-07, 3540, 'sudhanshu', 2021),
+('fsds', 101, 'ML', 'this is fsds course', 07-07, 3540, 'sudhanshu', 2022),
+('fabe', 101, 'ML', 'this is fabe course', 07-07, 3540, 'sudhanshu', 2022),
+('data analytics', 101, 'ML', 'this is data analytics course', 07-07, 3540, 'sudhanshu', 2022),
+('MERN', 101, 'ML', 'this is MERN course', 07-07, 3540, 'sudhanshu', 2022)
+
+select * from ineuron_courses1 where course_launch_year = 2020
+
+select partition_name, table_name , table_rows from information_schema.partitions where table_name = "ineuron_courses1"
+
+create table ineuron_courses2(
+course_name varchar(50),
+course_id int(10),
+course_title varchar(60),
+course_desc varchar(80),
+launch_date date,
+course_fee int,
+course_mentor varchar(60),
+course_launch_year int)
+partition by hash (course_launch_year)
+partitions 5;
+
+select partition_name, table_name , table_rows from information_schema.partitions where table_name = "ineuron_courses2"
+
+create table ineuron_courses3(
+course_name varchar(50),
+course_id int(10),
+course_title varchar(60),
+course_desc varchar(80),
+launch_date date,
+course_fee int,
+course_mentor varchar(60),
+course_launch_year int)
+partition by hash (course_launch_year)
+partitions 10;
+
+select partition_name, table_name , table_rows from information_schema.partitions where table_name = "ineuron_courses3"
+
+insert into ineuron_courses3 values ('machine learning', 101, 'ML', 'this is ML course', 07-07, 3540, 'sudhanshu', 2019),
+('AIops', 101, 'ML', 'this is AIops course', 07-07, 3540, 'sudhanshu', 2019),
+('dlcvnlp', 101, 'ML', 'this is dlcvnlp course', 07-07, 3540, 'sudhanshu', 2020),
+('blockchain', 101, 'ML', 'this is blockchain course', 07-07, 3540, 'sudhanshu', 2020),
+('RL', 101, 'ML', 'this is RL course', 07-07, 3540, 'sudhanshu', 2020),
+('big data', 101, 'ML', 'this is big data course', 07-07, 3540, 'sudhanshu', 2021),
+('FSDA', 101, 'ML', 'this is FSDA course', 07-07, 3540, 'sudhanshu', 2021),
+('java', 101, 'ML', 'this is java course', 07-07, 3540, 'sudhanshu', 2021),
+('fsds', 101, 'ML', 'this is fsds course', 07-07, 3540, 'sudhanshu', 2022),
+('fabe', 101, 'ML', 'this is fabe course', 07-07, 3540, 'sudhanshu', 2022),
+('data analytics', 101, 'ML', 'this is data analytics course', 07-07, 3540, 'sudhanshu', 2022),
+('MERN', 101, 'ML', 'this is MERN course', 07-07, 3540, 'sudhanshu', 2022)
+
+create table ineuron_courses4(
+course_name varchar(50),
+course_id int(10) primary key,
+course_title varchar(60),
+course_desc varchar(80),
+launch_date date,
+course_fee int,
+course_mentor varchar(60),
+course_launch_year int)
+partition by key ()
+partitions 10;
+
+select partition_name, table_name , table_rows from information_schema.partitions where table_name = "ineuron_courses4"
+
+insert into ineuron_courses4 values ('machine learning', 101, 'ML', 'this is ML course', 07-07, 3540, 'sudhanshu', 2019),
+('AIops', 102, 'ML', 'this is AIops course', 07-07, 3540, 'sudhanshu', 2019),
+('dlcvnlp', 103, 'ML', 'this is dlcvnlp course', 07-07, 3540, 'sudhanshu', 2020),
+('blockchain', 104, 'ML', 'this is blockchain course', 07-07, 3540, 'sudhanshu', 2020),
+('RL', 105, 'ML', 'this is RL course', 07-07, 3540, 'sudhanshu', 2020),
+('big data', 106, 'ML', 'this is big data course', 07-07, 3540, 'sudhanshu', 2021),
+('FSDA', 107, 'ML', 'this is FSDA course', 07-07, 3540, 'sudhanshu', 2021),
+('java', 108, 'ML', 'this is java course', 07-07, 3540, 'sudhanshu', 2021),
+('fsds', 109, 'ML', 'this is fsds course', 07-07, 3540, 'sudhanshu', 2022),
+('fabe', 110, 'ML', 'this is fabe course', 07-07, 3540, 'sudhanshu', 2022),
+('data analytics', 111, 'ML', 'this is data analytics course', 07-07, 3540, 'sudhanshu', 2022),
+('MERN', 112, 'ML', 'this is MERN course', 07-07, 3540, 'sudhanshu', 2022)
+
+select * from ineuron_courses4
+
+select MD5(105)
+
+create table ineuron_courses6(
+course_name varchar(50),
+course_id int(10),
+course_title varchar(60),
+course_desc varchar(80),
+launch_date date,
+course_fee int,
+course_mentor varchar(60),
+course_launch_year int)
+partition by list (course_launch_year)(
+partition p0 values in(2019, 2020),
+partition p1 values in(2022, 2021))
+
+insert into ineuron_courses6 values ('machine learning', 101, 'ML', 'this is ML course', 07-07, 3540, 'sudhanshu', 2019),
+('AIops', 102, 'ML', 'this is AIops course', 07-07, 3540, 'sudhanshu', 2019),
+('dlcvnlp', 103, 'ML', 'this is dlcvnlp course', 07-07, 3540, 'sudhanshu', 2020),
+('blockchain', 104, 'ML', 'this is blockchain course', 07-07, 3540, 'sudhanshu', 2020),
+('RL', 105, 'ML', 'this is RL course', 07-07, 3540, 'sudhanshu', 2020),
+('big data', 106, 'ML', 'this is big data course', 07-07, 3540, 'sudhanshu', 2021),
+('FSDA', 107, 'ML', 'this is FSDA course', 07-07, 3540, 'sudhanshu', 2021),
+('java', 108, 'ML', 'this is java course', 07-07, 3540, 'sudhanshu', 2021),
+('fsds', 109, 'ML', 'this is fsds course', 07-07, 3540, 'sudhanshu', 2022),
+('fabe', 110, 'ML', 'this is fabe course', 07-07, 3540, 'sudhanshu', 2022),
+('data analytics', 111, 'ML', 'this is data analytics course', 07-07, 3540, 'sudhanshu', 2022),
+('MERN', 112, 'ML', 'this is MERN course', 07-07, 3540, 'sudhanshu', 2022)
+
+select partition_name, table_name , table_rows from information_schema.partitions where table_name = "ineuron_courses6"
+
+create table ineuron_courses8(
+course_name varchar(50),
+course_id int(10),
+course_title varchar(60),
+course_desc varchar(80),
+launch_date date,
+course_fee int,
+course_mentor varchar(60),
+course_launch_year int)
+partition by range columns (course_name, course_id, course_launch_year)(
+partition p0 values less than ('aiops', 105, 2019),
+partition p1 values less than ('fsds', 110, 2020),
+partition p2 values less than ('mern', 107, 2021))
+
+select partition_name, table_name , table_rows from information_schema.partitions where table_name = "ineuron_courses8"
+insert ignore into ineuron_courses8 values ('machine learning', 101, 'ML', 'this is ML course', 07-07, 3540, 'sudhanshu', 2019),
+('AIops', 102, 'ML', 'this is AIops course', 07-07, 3540, 'sudhanshu', 2019),
+('dlcvnlp', 103, 'ML', 'this is dlcvnlp course', 07-07, 3540, 'sudhanshu', 2020),
+('blockchain', 104, 'ML', 'this is blockchain course', 07-07, 3540, 'sudhanshu', 2020),
+('RL', 105, 'ML', 'this is RL course', 07-07, 3540, 'sudhanshu', 2020),
+('big data', 106, 'ML', 'this is big data course', 07-07, 3540, 'sudhanshu', 2021),
+('FSDA', 107, 'ML', 'this is FSDA course', 07-07, 3540, 'sudhanshu', 2021),
+('java', 108, 'ML', 'this is java course', 07-07, 3540, 'sudhanshu', 2021),
+('fsds', 109, 'ML', 'this is fsds course', 07-07, 3540, 'sudhanshu', 2022),
+('fabe', 110, 'ML', 'this is fabe course', 07-07, 3540, 'sudhanshu', 2022),
+('data analytics', 111, 'ML', 'this is data analytics course', 07-07, 3540, 'sudhanshu', 2022),
+('MERN', 112, 'ML', 'this is MERN course', 07-07, 3540, 'sudhanshu', 2022)
+
+create table ineuron_courses9(
+course_name varchar(50),
+course_id int(10),
+course_title varchar(60),
+course_desc varchar(80),
+launch_date date,
+course_fee int,
+course_mentor varchar(60),
+course_launch_year int)
+partition by list columns (course_name)(
+partition p0 values in ('aiops', 'big data', 'fabe', 'java'),
+partition p1 values in ('fsds', 'fsda', 'RL', 'dlcvnlp' ),
+partition p2 values in  ('mern', 'blockchain'))
+
+insert ignore into ineuron_courses9 values ('machine learning', 101, 'ML', 'this is ML course', 07-07, 3540, 'sudhanshu', 2019),
+('AIops', 102, 'ML', 'this is AIops course', 07-07, 3540, 'sudhanshu', 2019),
+('dlcvnlp', 103, 'ML', 'this is dlcvnlp course', 07-07, 3540, 'sudhanshu', 2020),
+('blockchain', 104, 'ML', 'this is blockchain course', 07-07, 3540, 'sudhanshu', 2020),
+('RL', 105, 'ML', 'this is RL course', 07-07, 3540, 'sudhanshu', 2020),
+('big data', 106, 'ML', 'this is big data course', 07-07, 3540, 'sudhanshu', 2021),
+('FSDA', 107, 'ML', 'this is FSDA course', 07-07, 3540, 'sudhanshu', 2021),
+('java', 108, 'ML', 'this is java course', 07-07, 3540, 'sudhanshu', 2021),
+('fsds', 109, 'ML', 'this is fsds course', 07-07, 3540, 'sudhanshu', 2022),
+('fabe', 110, 'ML', 'this is fabe course', 07-07, 3540, 'sudhanshu', 2022),
+('data analytics', 111, 'ML', 'this is data analytics course', 07-07, 3540, 'sudhanshu', 2022),
+('MERN', 112, 'ML', 'this is MERN course', 07-07, 3540, 'sudhanshu', 2022)
+
+create table ineuron_courses10(
+course_name varchar(50),
+course_id int(10),
+course_title varchar(60),
+course_desc varchar(80),
+launch_date date,
+course_fee int,
+course_mentor varchar(60),
+course_launch_year int)
+partition by range(course_launch_year)
+subpartition by hash(course_launch_year)
+subpartitions 5 (
+partition p0 values less than (2019),
+partition p1 values less than (2020),
+partition p2 values less than (2021),
+partition p3 values less than (2022));
+
+select partition_name, table_name , table_rows from information_schema.partitions where table_name = "ineuron_courses10"
+
+
